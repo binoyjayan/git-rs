@@ -1,35 +1,28 @@
-#[allow(unused_imports)]
-use std::env;
-#[allow(unused_imports)]
-use std::fs;
-
 use clap::Parser;
+use std::io;
 
-#[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-struct Cli {
-    #[command(subcommand)]
-    command: Option<Commands>,
-}
+mod cli;
+mod commands;
 
-#[derive(clap::Subcommand)]
-enum Commands {
-    /// Initialize git repository
-    Init,
-}
+use cli::{Cli, Commands};
 
-fn main() {
+fn main() -> io::Result<()> {
     let cli = Cli::parse();
     match cli.command {
         Some(Commands::Init) => {
-            fs::create_dir(".git").unwrap();
-            fs::create_dir(".git/objects").unwrap();
-            fs::create_dir(".git/refs").unwrap();
-            fs::write(".git/HEAD", "ref: refs/heads/main\n").unwrap();
-            println!("Initialized git directory")
+            commands::init::init()?;
+        }
+        Some(Commands::CatFile {
+            pretty_print,
+            object_hash,
+        }) => {
+            commands::cat_file::cat_file(pretty_print, &object_hash)?;
         }
         None => {
-            println!("unknown command")
+            println!("Supported commands");
+            println!("init: Initialize git repository");
+            println!("cat-file: cat file with pretty print");
         }
     }
+    Ok(())
 }
