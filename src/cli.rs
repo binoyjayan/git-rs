@@ -14,12 +14,23 @@ pub(crate) enum Commands {
     /// cat file with pretty print
     CatFile {
         #[clap(short, long)]
+        /// Pretty print the object
         pretty_print: bool,
+        /// The object hash of the file
         object_hash: String,
     },
+    /// Create a hash of an object
     HashObject {
         #[clap(short, long)]
         write_object: bool,
         file: String,
+    },
+    /// List the contents of a tree object
+    LsTree {
+        /// Only display the name of the object
+        #[clap(short, long)]
+        name_only: bool,
+        /// The object hash of the tree
+        object_hash: String,
     },
 }
