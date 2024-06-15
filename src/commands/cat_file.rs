@@ -22,7 +22,7 @@ pub(crate) fn cat_file(_pretty_print: bool, object_hash: &str) -> io::Result<()>
         }
         header.push(byte[0]);
     }
-    // Parse header of format: blob <size>
+    // Parse header of format: "blob <size>"
     let header = String::from_utf8(header).unwrap();
     let mut header = header.split_whitespace();
     // convert option to io::result when none

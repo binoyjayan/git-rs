@@ -17,4 +17,9 @@ pub(crate) enum Commands {
         pretty_print: bool,
         object_hash: String,
     },
+    HashObject {
+        #[clap(short, long)]
+        write_object: bool,
+        file: String,
+    },
 }

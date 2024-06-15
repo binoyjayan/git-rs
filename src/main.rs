@@ -18,6 +18,9 @@ fn main() -> io::Result<()> {
         }) => {
             commands::cat_file::cat_file(pretty_print, &object_hash)?;
         }
+        Some(Commands::HashObject { write_object, file }) => {
+            commands::hash_object::hash_object(write_object, &file)?;
+        }
         None => {
             println!("Supported commands");
             println!("init: Initialize git repository");

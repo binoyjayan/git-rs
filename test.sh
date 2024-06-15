@@ -2,9 +2,10 @@
 
 script_path="$(dirname "$(readlink -f "$0")")"
 
-cd git_dir
+mkdir -p /tmp/git_dir
+cd /tmp/git_dir
 
 cargo run \
     --quiet \
-    --target-dir=../target \
+    --target-dir="$script_path/target" \
     --manifest-path "$script_path/Cargo.toml" "$@"
