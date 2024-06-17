@@ -1,6 +1,6 @@
 use std::io;
 
-use crate::objects::{obj::ObjectKind, readers::ObjReader};
+use crate::objects::{obj::ObjectKind, readers::ObjReader, tree::TreeReader};
 
 /// cat file with pretty print and an object hash
 pub(crate) fn cat_file(_pretty_print: bool, object_hash: &str) -> io::Result<()> {
@@ -11,21 +11,17 @@ pub(crate) fn cat_file(_pretty_print: bool, object_hash: &str) -> io::Result<()>
             io::copy(&mut reader, &mut io::stdout())?;
         }
         ObjectKind::Tree => {
-            // let mut entry = Vec::new();
-            // while reader.decoder.read_until(b'\0', &mut entry)? != 0 {
-            //     let entry = String::from_utf8(entry).unwrap();
-            //     let mut entry = entry.split_whitespace();
-            //     let mode = entry.next().unwrap();
-            //     let object_hash = entry.next().unwrap();
-            //     let object_type = entry.next().unwrap();
-            //     let object_name = entry.collect::<Vec<&str>>().join(" ");
-            //     println!("{} {} {} {}", mode, object_type, object_hash, object_name);
-            //     entry.clear();
-            // }
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "Object type tree is not supported",
-            ));
+            let mut tree_reader = TreeReader::new(&mut reader);
+            let entries = tree_reader.read()?;
+            for entry in entries {
+                println!(
+                    "{} {} {}    {}",
+                    entry.mode,
+                    entry.mode.as_str(),
+                    hex::encode(entry.sha),
+                    entry.name
+                );
+            }
         }
         ObjectKind::Tag => {
             return Err(io::Error::new(

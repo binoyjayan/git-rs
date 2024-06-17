@@ -4,7 +4,6 @@ use std::io;
 mod cli;
 mod commands;
 mod objects;
-mod tree;
 
 use cli::{Cli, Commands};
 

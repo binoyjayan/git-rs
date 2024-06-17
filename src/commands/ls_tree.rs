@@ -1,9 +1,6 @@
 use std::io;
 
-use crate::{
-    objects::{obj::ObjectKind, readers::ObjReader},
-    tree::TreeReader,
-};
+use crate::objects::{obj::ObjectKind, readers::ObjReader, tree::TreeReader};
 
 /// List the contents of a tree object
 pub(crate) fn ls_tree(name_only: bool, tree_hash: &str) -> io::Result<()> {
