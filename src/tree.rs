@@ -37,6 +37,7 @@ where
 
             let mut name = Vec::new();
             self.reader.read_until(b'\0', &mut name)?;
+            name.pop(); // remove the last byte which is the null byte
             let name = String::from_utf8(name).unwrap();
 
             let mut sha = [0; 20];
