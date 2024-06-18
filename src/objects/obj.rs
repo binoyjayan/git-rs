@@ -59,6 +59,7 @@ impl fmt::Display for TreeMode {
 }
 
 impl TreeMode {
+    /// Return the string representation of the tree mode
     pub fn as_str(&self) -> &'static str {
         match self {
             TreeMode::Directory => "tree",
@@ -69,6 +70,22 @@ impl TreeMode {
             TreeMode::Submodule => "commit",
             TreeMode::Symlink => "blob",
             TreeMode::Other(_) => "unknown",
+        }
+    }
+}
+
+// Convert to numeric representation
+impl From<TreeMode> for u32 {
+    fn from(mode: TreeMode) -> u32 {
+        match mode {
+            TreeMode::Directory => 0o040000,
+            TreeMode::File(ft) => match ft {
+                FileType::Executable => 0o100755,
+                FileType::NonExecutable => 0o100644,
+            },
+            TreeMode::Submodule => 0o160000,
+            TreeMode::Symlink => 0o120000,
+            TreeMode::Other(n) => n,
         }
     }
 }

@@ -33,4 +33,10 @@ pub(crate) enum Commands {
         /// The object hash of the tree
         object_hash: String,
     },
+    /// Write a tree object for a directory
+    WriteTree {
+        /// prefix for the directory
+        #[clap(short, long)]
+        prefix: Option<String>,
+    },
 }

@@ -1,3 +1,4 @@
+pub(crate) mod hasher;
 pub(crate) mod obj;
 pub(crate) mod readers;
 pub(crate) mod tree;

@@ -20,13 +20,17 @@ fn main() -> io::Result<()> {
             commands::cat_file::cat_file(pretty_print, &object_hash)?;
         }
         Some(Commands::HashObject { write_object, file }) => {
-            commands::hash_object::hash_object(write_object, &file)?;
+            let object_hash = commands::hash_object::hash_object(write_object, &file)?;
+            println!("{}", hex::encode(object_hash));
         }
         Some(Commands::LsTree {
             name_only,
             object_hash,
         }) => {
             commands::ls_tree::ls_tree(name_only, &object_hash)?;
+        }
+        Some(Commands::WriteTree { prefix }) => {
+            commands::write_tree::write_tree(prefix)?;
         }
         None => {
             println!("Supported commands");
