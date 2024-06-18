@@ -52,7 +52,7 @@ where
                 .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
 
             let mode = match mode_int {
-                040000 => TreeMode::Directory,
+                40000 => TreeMode::Directory,
                 100644 => TreeMode::File(FileType::NonExecutable),
                 100755 => TreeMode::File(FileType::Executable),
                 160000 => TreeMode::Submodule,
