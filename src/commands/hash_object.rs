@@ -17,22 +17,9 @@ pub(crate) fn hash_object<P: AsRef<path::Path>>(
 
     let object_hash = if write {
         let mut writer = ObjWriter::new()?;
-
         writer.write_all(header.as_bytes())?;
         io::copy(&mut reader, &mut writer)?;
-
-        let (tmp_path, hash) = writer.finalize();
-        let hash_str = hex::encode(&hash);
-
-        // The first two characters of the object hash is the directory
-        // that contains the object file, the rest is the file name.
-        let obj_dir = &hash_str[..2];
-        let obj_file = &hash_str[2..];
-        let object_dir = format!(".git/objects/{}", obj_dir);
-        let object_file = format!(".git/objects/{}/{}", obj_dir, obj_file);
-        fs::create_dir_all(object_dir)?;
-        fs::rename(tmp_path, object_file)?;
-        hash
+        writer.finalize()?
     } else {
         let mut hasher = Hasher::new();
         hasher.write_all(header.as_bytes())?;

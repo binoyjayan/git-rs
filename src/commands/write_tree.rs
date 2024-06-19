@@ -5,8 +5,8 @@ use std::{fs, io, path};
 use crate::{
     commands::hash_object::hash_object,
     objects::{
-        hasher::Hasher,
         obj::{FileType, TreeMode},
+        writers::ObjWriter,
     },
 };
 
@@ -44,8 +44,6 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
 
     let mut tree_obj = Vec::new();
     for path in entries {
-        // let entry = entry?;
-        // let path = entry.path();
         let meta = path.metadata()?;
         // Ignore .git directory
         if path.ends_with(".git") {
@@ -60,9 +58,7 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
             TreeMode::Directory
         } else if meta.is_symlink() {
             TreeMode::Symlink
-        } else if meta.is_symlink() {
-            TreeMode::Symlink
-        } else {
+        } else if meta.is_file() {
             let file_type = meta.file_type();
             let mode = if file_type.is_file() {
                 if meta.permissions().mode() & 0o111 != 0 {
@@ -74,6 +70,8 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
                 FileType::NonExecutable
             };
             TreeMode::File(mode)
+        } else {
+            continue;
         }
         .into();
         let hash = match meta.is_dir() {
@@ -85,10 +83,10 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
                     continue;
                 }
             }
-            false => hash_object(false, &path)?,
+            false => hash_object(true, &path)?,
         };
         let mode_str = format!("{:o}", mode);
-        println!("{} {} {}", mode_str, hex::encode(&hash), file_name);
+        // println!("{} {} {}", mode_str, hex::encode(&hash), file_name);
         tree_obj.extend_from_slice(mode_str.as_bytes());
         tree_obj.push(b' ');
         tree_obj.extend_from_slice(file_name.as_bytes());
@@ -99,21 +97,10 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
         Ok(None)
     } else {
         let header = format!("tree {}\0", tree_obj.len());
-        let mut hasher = Hasher::new();
-        hasher.write_all(header.as_bytes())?;
-        hasher.write_all(&tree_obj)?;
-        let hash = hasher.finalize();
-        // let mut writer = ObjWriter::new()?;
-        // writer.write_all(header.as_bytes())?;
-        // writer.write_all(&tree_obj)?;
-        // let (tmp_path, hash) = writer.finalize();
-        // let hash_str = hex::encode(&hash);
-        // let obj_dir = &hash_str[..2];
-        // let obj_file = &hash_str[2..];
-        // let object_dir = format!(".git/objects/{}", obj_dir);
-        // let object_file = format!(".git/objects/{}/{}", obj_dir, obj_file);
-        // fs::create_dir_all(object_dir)?;
-        // fs::rename(tmp_path, object_file)?;
+        let mut writer = ObjWriter::new()?;
+        writer.write_all(header.as_bytes())?;
+        writer.write_all(&tree_obj)?;
+        let hash = writer.finalize()?;
         Ok(Some(hash))
     }
 }

@@ -26,10 +26,23 @@ impl ObjWriter {
         })
     }
 
-    pub(crate) fn finalize(self) -> (PathBuf, Vec<u8>) {
-        let path = self.file_path.clone();
+    /// Finalize the object writing process and create the object file
+    /// with the hash of the object as the file name. Return the hash
+    /// of the object. This function takes ownership of the writer so
+    /// it can't be used after this function is called.    
+    pub(crate) fn finalize(self) -> io::Result<Vec<u8>> {
+        let tmp_path = self.file_path.clone();
         let hash = self.hasher.finalize().to_vec();
-        (path, hash)
+        let hash_str = hex::encode(&hash);
+        // The first two characters of the object hash is the directory
+        // that contains the object file, the rest is the file name.
+        let obj_dir = &hash_str[..2];
+        let obj_file = &hash_str[2..];
+        let object_dir = format!(".git/objects/{}", obj_dir);
+        let object_file = format!(".git/objects/{}/{}", obj_dir, obj_file);
+        fs::create_dir_all(object_dir)?;
+        fs::rename(tmp_path, object_file)?;
+        Ok(hash)
     }
 }
 
@@ -50,23 +63,3 @@ impl Write for ObjWriter {
         self.writer.flush()
     }
 }
-
-// pub(crate) struct HashWriter<W> {
-//     pub(crate) writer: W,
-//     pub(crate) hasher: sha1::Sha1,
-// }
-
-// impl<W> Write for HashWriter<W>
-// where
-//     W: Write,
-// {
-//     fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-//         let n = self.writer.write(buf)?;
-//         self.hasher.update(&buf[..n]);
-//         Ok(n)
-//     }
-
-//     fn flush(&mut self) -> std::io::Result<()> {
-//         self.writer.flush()
-//     }
-// }
