@@ -1,7 +1,7 @@
 use std::io;
 use std::io::{BufRead, Read};
 
-use crate::objects::obj::{FileType, TreeMode};
+use crate::objects::obj::{BlobType, TreeMode};
 
 pub(crate) struct TreeEntry {
     pub(crate) mode: TreeMode,
@@ -53,8 +53,8 @@ where
 
             let mode = match mode_int {
                 40000 => TreeMode::Directory,
-                100644 => TreeMode::File(FileType::NonExecutable),
-                100755 => TreeMode::File(FileType::Executable),
+                100644 => TreeMode::Blob(BlobType::NonExecutable),
+                100755 => TreeMode::Blob(BlobType::Executable),
                 160000 => TreeMode::Submodule,
                 120000 => TreeMode::Symlink,
                 other => TreeMode::Other(other),

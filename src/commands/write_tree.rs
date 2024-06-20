@@ -5,7 +5,7 @@ use std::{fs, io, path};
 use crate::{
     commands::hash_object::hash_object,
     objects::{
-        obj::{FileType, TreeMode},
+        obj::{BlobType, TreeMode},
         writers::ObjWriter,
     },
 };
@@ -62,14 +62,14 @@ pub(crate) fn write_subtree(dir: &path::PathBuf) -> io::Result<Option<Vec<u8>>> 
             let file_type = meta.file_type();
             let mode = if file_type.is_file() {
                 if meta.permissions().mode() & 0o111 != 0 {
-                    FileType::Executable
+                    BlobType::Executable
                 } else {
-                    FileType::NonExecutable
+                    BlobType::NonExecutable
                 }
             } else {
-                FileType::NonExecutable
+                BlobType::NonExecutable
             };
-            TreeMode::File(mode)
+            TreeMode::Blob(mode)
         } else {
             continue;
         }
