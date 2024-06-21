@@ -39,7 +39,7 @@ pub(crate) enum Commands {
         #[clap(short, long)]
         prefix: Option<String>,
     },
-    /// Commit a tree object
+    /// Create a commit a tree object
     CommitTree {
         /// The object hash of the tree
         object_hash: String,
@@ -47,6 +47,11 @@ pub(crate) enum Commands {
         #[clap(short, long)]
         parent_commit: Option<String>,
         /// The commit message
+        #[clap(short, long)]
+        message: String,
+    },
+    // Create a commit
+    Commit {
         #[clap(short, long)]
         message: String,
     },

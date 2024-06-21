@@ -24,7 +24,7 @@ pub(crate) fn write_tree(prefix: Option<String>) -> io::Result<()> {
             }
             path
         }
-        None => fs::canonicalize(".")?,
+        None => path::PathBuf::from("."),
     };
 
     if let Some(hash) = write_subtree(&dir)? {

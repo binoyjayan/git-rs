@@ -37,9 +37,11 @@ fn main() -> io::Result<()> {
             parent_commit,
             message,
         }) => {
-            let commit_hash =
-                commands::commit_tree::commit_tree(&object_hash, parent_commit, &message)?;
+            let commit_hash = commands::commit::commit_tree(&object_hash, parent_commit, &message)?;
             println!("{}", hex::encode(commit_hash));
+        }
+        Some(Commands::Commit { message }) => {
+            commands::commit::commit(&message)?;
         }
         None => {
             println!("Supported commands");
