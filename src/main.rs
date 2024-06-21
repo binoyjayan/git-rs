@@ -32,6 +32,15 @@ fn main() -> io::Result<()> {
         Some(Commands::WriteTree { prefix }) => {
             commands::write_tree::write_tree(prefix)?;
         }
+        Some(Commands::CommitTree {
+            object_hash,
+            parent_commit,
+            message,
+        }) => {
+            let commit_hash =
+                commands::commit_tree::commit_tree(&object_hash, parent_commit, &message)?;
+            println!("{}", hex::encode(commit_hash));
+        }
         None => {
             println!("Supported commands");
             println!("init: Initialize git repository");
