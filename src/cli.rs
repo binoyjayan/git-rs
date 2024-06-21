@@ -50,9 +50,16 @@ pub(crate) enum Commands {
         #[clap(short, long)]
         message: String,
     },
-    // Create a commit
+    /// Create a commit
     Commit {
         #[clap(short, long)]
         message: String,
+    },
+    /// Clone a repository
+    Clone {
+        /// The repository URL
+        url: String,
+        /// directory to clone into
+        dir: Option<String>,
     },
 }

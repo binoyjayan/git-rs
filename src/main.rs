@@ -43,6 +43,9 @@ fn main() -> io::Result<()> {
         Some(Commands::Commit { message }) => {
             commands::commit::commit(&message)?;
         }
+        Some(Commands::Clone { url , dir}) => {
+            println!("Cloning from {} into {:?}", url, dir);
+        }
         None => {
             println!("Supported commands");
             println!("init: Initialize git repository");

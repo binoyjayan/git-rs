@@ -67,3 +67,29 @@ codecrafters test
 ```
 
 Visit https://codecrafters.io/cli to install
+
+# Resources
+
+[git-objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
+
+[git-bottom-up](http://ftp.newartisans.com/pub/git.from.bottom.up.pdf)
+
+[pygit](https://benhoyt.com/writings/pygit/)
+
+[git-smart-http](https://www.git-scm.com/docs/http-protocol)
+
+[git-clone](https://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/)
+
+[gitprotocol-pack](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitprotocol-pack.txt)
+
+[gitformat-pack](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitformat-pack.txt)
+
+[protocol-capabilities](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitprotocol-capabilities.txt)
+
+[protocol-common](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitprotocol-common.txt)
+
+[Unpacking Git packfiles](https://codewords.recurse.com/issues/three/unpacking-git-packfiles)
+
+[Sneaky Git number encoding](https://medium.com/@concertdaw/sneaky-git-number-encoding-ddcc5db5329f)
+
+[git-smart-https](https://stackoverflow.com/questions/68062812/what-does-the-git-smart-https-protocol-fully-look-like-in-all-its-glory)
