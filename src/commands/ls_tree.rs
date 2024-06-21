@@ -13,7 +13,13 @@ pub(crate) fn ls_tree(name_only: bool, tree_hash: &str) -> io::Result<()> {
                 if name_only {
                     println!("{}", entry.name);
                 } else {
-                    println!("{} {} {}", entry.mode, hex::encode(entry.sha), entry.name);
+                    println!(
+                        "{} {} {}    {}",
+                        entry.mode,
+                        entry.mode.as_str(),
+                        hex::encode(entry.sha),
+                        entry.name
+                    );
                 }
             }
         }
