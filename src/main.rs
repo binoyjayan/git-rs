@@ -43,8 +43,11 @@ fn main() -> io::Result<()> {
         Some(Commands::Commit { message }) => {
             commands::commit::commit(&message)?;
         }
-        Some(Commands::Clone { url , dir}) => {
-            println!("Cloning from {} into {:?}", url, dir);
+        Some(Commands::LsRemote { url }) => {
+            commands::ls_remote::ls_remote(&url)?;
+        }
+        Some(Commands::Clone { url, dir }) => {
+            commands::clone::clone_repo(&url, dir.as_deref())?;
         }
         None => {
             println!("Supported commands");

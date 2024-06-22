@@ -62,4 +62,9 @@ pub(crate) enum Commands {
         /// directory to clone into
         dir: Option<String>,
     },
+    /// List remote repository contents
+    LsRemote {
+        /// The repository URL
+        url: String,
+    },
 }
